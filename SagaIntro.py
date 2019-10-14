@@ -29,13 +29,10 @@ client = speech.SpeechClient()
 pygame.init()
 pygame.mixer.init()
 
-def CreateStartAudio():
-    t2s = gTTS("What kind of story do you want to hear tonight?", lang ='en')
-    t2s.save('Start.mp3')
 
 def Start():
     pygame.mixer.init()
-    pygame.mixer.music.load("Start.mp3")
+    pygame.mixer.music.load("Saga_Audio_Files/IntroWakeUp.mp3")
     pygame.mixer.music.play()
     while pygame.mixer.music.get_busy(): 
         pygame.time.Clock().tick(10)

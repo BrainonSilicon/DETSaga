@@ -1,4 +1,4 @@
-from Saga_Main import playAudio
+from utils import playAudio
 #some of these imports my be un-needed
 #from __future__ import division
 
@@ -19,15 +19,38 @@ import time
 from adafruit_crickit import crickit
 
 
-def PlayCurrentFork(CurrFork, variables={}):
-    print("Playing current fork")
-    STORY_VARIABLES = variables
-    currFork()
+def PlayCurrentFork(currForkKey, variables={}):
+    print("Playing current fork {}".format("currForkKey"))
+    curr_fork = STORY_FORKS[currForkKey]
+    curr_fork()
+    
+def Intro():
+    playAudio("Saga_Audio_Files/NewCleverMagicianIntro.mp3")
+    
+def River():
+    playAudio("Saga_Audio_Files/CleverMagicianForkA.mp3")
+    
+def Valley():
+    playAudio("Saga_Audio_Files/Norm_NewValley.mp3")
+    
+def NoFork():
+    playAudio("Saga_Audio_Files/TestNoForkWritten.mp3")
+    
+def Mirror():
+    playAudio("Saga_Audio_Files/NewMagicianAfterMirror.mp3")
     
 STORY_FORKS = {
     'Intro' : Intro,
-    'Stone': Stone, 
-    'Clay': Clay
+    'Right': River,
+    'River': River,
+    'Figure': NoFrok,
+    'Ghost': NoFork,
+    'Left': Valley,
+    'Valley': Valley,
+    'Yes': Mirror,
+    'No': Mirror,
+    'Arch': NoFork,
+    'Sand': NoFork
 }
 
 

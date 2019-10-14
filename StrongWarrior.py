@@ -18,14 +18,8 @@ import os
 import time
 from adafruit_crickit import crickit
 
-
-STORY_VARIABLES = {}
-
 def PlayCurrentFork(currForkKey, variables={}):
-    global STORY_VARIABLES
     print("Playing current fork {}".format("currForkKey"))
-
-    STORY_VARIABLES = variables
     curr_fork = STORY_FORKS[currForkKey]
     curr_fork()
 
@@ -39,20 +33,6 @@ def Stone():
 def Clay():
     playAudio("Saga_Audio_Files/TestNoForkWritten.mp3")
 
- 
-##### THESE ARE THE PROMPTS #####   
-# def ForkAPrompt(): 
-#     pygame.mixer.init()
-#     pygame.mixer.music.load("ForkAPrompt.mp3")
-#     pygame.mixer.music.play()
-
-# def ForkAaPrompt(): 
-#     pygame.mixer.init()
-#     pygame.mixer.music.load("ForkAaPrompt.mp3")
-#     pygame.mixer.music.play()  
-
-    
-#### TODO update the dictionary with the options 
     
 #this is the dictionary 
 STORY_FORKS = {

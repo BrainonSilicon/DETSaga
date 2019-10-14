@@ -125,14 +125,6 @@ class MicrophoneStream(object):
                 yield b''.join(data)
                
 
-## ARE WE NO LONGER USING THIS AS WE'RE USING AUDIO FILES INSTEAD -> ALSO IT'S THE SAME AS ABOVE ???? ########
-# def playTextToAudio(text):
-#     #TODO: read in the text and play it as an audio file
-#     #google text to speech: check viviks example
-#     pass
-#     t2s = gTTS(text, lang ='en')
-#     t2s.save('Start.mp3')
-
 
 #this loop is where the microphone stream gets sent
 def ListenPrintLoop(responses):
@@ -213,6 +205,7 @@ def StoryDecision(transcript):
         return
 
 
+    #THREADING SAGALIGHTS
     print("Current Story : {}".format(CURR_STORY))
     if CURR_STORY:
         forks = CURR_STORY.STORY_FORKS.keys()
@@ -237,17 +230,13 @@ def StoryDecision(transcript):
 
         #If the kid responds TODO : other stories
     elif re.search("oracle", transcript, re.I):
-        #SagaLights.#######NAME########()
+        SagaLights.Oracle()
         SagaServo.SagaOpens()
         CURR_STORY = CleverMagician
-        curr_fork = CURR_STORY.STORY_FORKS['Intro'] #this might need to change to be changing based on where it is (eg. i)
-        CURR_STORY.PlayCurrentFork(curr_fork)
+        CURR_STORY.PlayCurrentFork('Intro')
          
 def PickAStory():
-    text2Speech = gTTS('What kind of story do you want to hear tonight?', lang ='en')
-    text2Speech.save('audioFile.mp3')
-    playAudio('audioFile.mp3')
-
+    playAudio('Saga_Audio_Files/IntroWakeUp.mp3')
 
 #function for the capacitive touch which - when pressed - will offer the story choice and the gem stone will glow
 #### TODO change this for force touch

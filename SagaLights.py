@@ -81,13 +81,24 @@ def Magician():
     time.sleep(0.3)
     pixels.fill(BLUE)
     
+def Oracle():
+    pixels.fill(RED)
+    
 def SagaOff():
     pixels.fill(OFF)
 
 # at end of audio file
 def WaitingForReply():
+    duration = 10
+    perc = duration / 100
 
-    pass
+    for i in range(11):
+        pixels[8] = fade(OFF, WHITE, i * perc)
+        time.sleep(0.1)
+    for i in range(11):
+        pixels[8] = fade(WHITE, OFF, i * perc)
+        time.sleep(0.1)
+    
 
 # received voice audio that links to some fork
 def AcceptedReply():

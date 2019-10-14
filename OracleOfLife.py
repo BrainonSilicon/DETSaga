@@ -1,4 +1,4 @@
-from Saga_Main import playAudio
+from utils import playAudio
 #some of these imports my be un-needed
 #from __future__ import division
 
@@ -18,10 +18,10 @@ import os
 import time
 from adafruit_crickit import crickit
 
-def PlayCurrentFork(CurrFork, variables={}):
-    print("Playing current fork")
-    STORY_VARIABLES = variables
-    currFork()
+def PlayCurrentFork(currForkKey, variables={}):
+    print("Playing current fork {}".format("currForkKey"))
+    curr_fork = STORY_FORKS[currForkKey]
+    curr_fork()
     
 def Intro():
     pygame.mixer.init()
