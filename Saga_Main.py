@@ -7,6 +7,7 @@ from __future__ import division
 import re
 import sys
 import os
+import config
 
 from google.cloud import speech
 from google.cloud.speech import enums
@@ -19,6 +20,7 @@ from gtts import gTTS
 import time
 from adafruit_crickit import crickit
 from adafruit_seesaw.neopixel import NeoPixel
+
 
 #### IMPORT SAGA'S FILES ########
 import SagaServo
@@ -36,7 +38,7 @@ CHUNK = int(RATE / 10)  # 100ms ## TODO this also needs to be changed for the DE
 
 #import credentials 
 credential_path = "/home/pi/DET190-JSON/DETcredential.json" #TODO change this to whomever's pi we're using
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"]=credential_path
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"]=config.GOOGLE_AUTH
 
 #THIS IS VERY IMPORTANT AS THE API LOOKS FOR IT 
 client = speech.SpeechClient()
@@ -45,6 +47,10 @@ client = speech.SpeechClient()
 pygame.init()
 pygame.mixer.init()
 
+#FST
+ss = crickit.seesaw
+GEM_TOUCH = crickit.SIGNAL1
+ss.pin_mode(GEM_TOUCH, ss.INPUT_PULLUP)
 
 #### STORY  GLOBAL VARIABLES #######################
 ####################################################
@@ -117,18 +123,6 @@ class MicrophoneStream(object):
                         break
 
                 yield b''.join(data)
-
-#function for the capacitive touch which - when pressed - will offer the story choice and the gem stone will glow
-#### TODO change this for force touch
-def touch_to_start():
-    crickit.touch_1.value
-    print("Press the Capactive Touch button 1: touch_to_start()")
-    if crickit.touch_1.value:
-        SagaLights.SagaReady()
-        time.sleep(1)
-        print(crickit.touch_1.value)
-    else:
-        print("No button push detected.")
                
 
 ## ARE WE NO LONGER USING THIS AS WE'RE USING AUDIO FILES INSTEAD -> ALSO IT'S THE SAME AS ABOVE ???? ########
@@ -211,47 +205,57 @@ def ListenPrintLoop(responses):
            
 def StoryDecision(transcript):
     global CURR_STORY
+
     print("is audio playing? : {}".format(pygame.mixer.music.get_busy()))
-    
+
     if pygame.mixer.music.get_busy():
+        print("exited storyDecision early.")
         return
-    
+
+
     print("Current Story : {}".format(CURR_STORY))
     if CURR_STORY:
         forks = CURR_STORY.STORY_FORKS.keys()
         for fork in forks:
             if re.search(fork, transcript, re.I):
                 print("the fork selected is: {}",format(fork))
-                CURR_STORY.PlayCurrentFork(fork) 
+                CURR_STORY.PlayCurrentFork(fork)
 
-    #If the kid responds "strong warrior", gTTs matches, and the StrongWarrior file plays
+                #If the kid responds "strong warrior", gTTs matches, and the StrongWarrior file plays
     elif re.search("strong", transcript, re.I):
         SagaLights.Warrior()
         SagaServo.SagaOpens()
         CURR_STORY = StrongWarrior
         CURR_STORY.PlayCurrentFork('Intro')
 
-     #If the kid responds "clever", gTTs matches, and the CleverMagician file plays
-     elif re.search("clever", transcript, re.I):
-         SagaLights.Magician()
-         SagaServo.SagaOpens()
-         CURR_STORY = DemoStory
-         CURR_STORY.PlayCurrentFork('Intro')
+        #If the kid responds "clever", gTTs matches, and the CleverMagician file plays
+    elif re.search("clever", transcript, re.I):
+        SagaLights.Magician()
+        SagaServo.SagaOpens()
+        CURR_STORY = DemoStory
+        CURR_STORY.PlayCurrentFork('Intro')
 
-     #If the kid responds TODO : other stories 
-     elif re.search("oracle", transcript, re.I):
-         SagaLights.#######NAME########()
-         SagaServo.SagaOpens()
-         CURR_STORY = CleverMagician
-         curr_fork = CURR_STORY.STORY_FORKS['Intro'] #this might need to change to be changing based on where it is (eg. i) 
-         CURR_STORY.PlayCurrentFork(curr_fork)
+        #If the kid responds TODO : other stories
+    elif re.search("oracle", transcript, re.I):
+        #SagaLights.#######NAME########()
+        SagaServo.SagaOpens()
+        CURR_STORY = CleverMagician
+        curr_fork = CURR_STORY.STORY_FORKS['Intro'] #this might need to change to be changing based on where it is (eg. i)
+        CURR_STORY.PlayCurrentFork(curr_fork)
          
 def PickAStory():
-    SagaLights.SagaReady()
-    playAudio("Saga_Audio_Files/SagaStartAudio.mp3")
     text2Speech = gTTS('What kind of story do you want to hear tonight?', lang ='en')
     text2Speech.save('audioFile.mp3')
     playAudio('audioFile.mp3')
+
+
+#function for the capacitive touch which - when pressed - will offer the story choice and the gem stone will glow
+#### TODO change this for force touch
+def touch_to_start():
+    # if val is false that means touched
+    val = not ss.digital_read(GEM_TOUCH)
+    return val
+
 
 ######## SAGA'S MAIN WHICH SEQUENCES THE FUNCTIONALITY ##########
 #################################################################
@@ -271,14 +275,21 @@ def Main():
         config=config,
         interim_results=True)
     
-    # user touches the gem stone which triggers the book opening 
-    touch_to_start() #this also triggers the gem stone to glow white
-    print("Saga's touch and lights are working")
+    # user touches the gem stone which triggers the book opening
+    touched = False
+    while (not touched):
+        touched = touch_to_start()
+        
+    if touched:
+        SagaLights.SagaReady()
+        playAudio("Saga_Audio_Files/SagaStartAudio.mp3")
+        time.sleep(1)
+        PickAStory()
   
     #this section is where the action for the gTTs happens:
     ## SAGA OFFERS THE STORY CHOICES
-    PickAStory();
-    
+    # PickAStory() #TODO comment out once we have touch working
+
     ##############################################################
     #if you get a response -> play the story 
     #if response == True  
