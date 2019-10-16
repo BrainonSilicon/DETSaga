@@ -1,6 +1,6 @@
 from Saga_Main import playAudio
 #some of these imports my be un-needed
-from __future__ import division
+#from __future__ import division
 
 import re
 import sys
@@ -20,14 +20,6 @@ from adafruit_crickit import crickit
 
 
 STORY_VARIABLES = {}
-#this is the dictionary 
-STORY_FORKS = {
-    'intro' : intro,
-    #these words will be what trigger the next piece of the story 
-    'stone': stone, 
-    #'word_aa': AA,
-    #'word_ab': AB
-}
 
 def PlayCurrentFork(currFork, variables={}):
     print("Playing current fork")
@@ -35,7 +27,7 @@ def PlayCurrentFork(currFork, variables={}):
     currFork()
 
     
-def stone:
+def stone():
     text = "The warrior lived in a stone house. bla bla bla. City or Ocean?"
     playAudio(text)
     
@@ -66,4 +58,12 @@ def intro():
     # streaming_config = types.StreamingRecognitionConfig(
     #     config=config,
     #     interim_results=True)
-    
+
+#this is the dictionary 
+STORY_FORKS = {
+    'intro' : intro,
+    #these words will be what trigger the next piece of the story 
+    'stone': stone, 
+    #'word_aa': AA,
+    #'word_ab': AB
+}
