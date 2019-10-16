@@ -174,6 +174,7 @@ def listen_print_loop(responses):
 
             
 def story_decision(transcript):
+    global CURR_STORY
     print("is audio playing? : {}".format(pygame.mixer.music.get_busy()))
     
     if pygame.mixer.music.get_busy():

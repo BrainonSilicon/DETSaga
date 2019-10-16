@@ -22,6 +22,7 @@ from adafruit_crickit import crickit
 STORY_VARIABLES = {}
 
 def PlayCurrentFork(currFork, variables={}):
+    global STORY_VARIABLES
     print("Playing current fork")
     STORY_VARIABLES = variables
     currFork()
@@ -59,11 +60,11 @@ def intro():
     #     config=config,
     #     interim_results=True)
 
-#this is the dictionary 
+#this is the dictionary
 STORY_FORKS = {
     'intro' : intro,
-    #these words will be what trigger the next piece of the story 
-    'stone': stone, 
+    #these words will be what trigger the next piece of the story
+    'stone': stone,
     #'word_aa': AA,
     #'word_ab': AB
 }
