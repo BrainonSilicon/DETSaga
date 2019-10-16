@@ -174,28 +174,45 @@ def listen_print_loop(responses):
 
             
 def story_decision(transcript):
+    print("is audio playing? : {}".format(pygame.mixer.music.get_busy()))
+    
     if pygame.mixer.music.get_busy():
         return
     
+    print("Current Story : {}".format(CURR_STORY))
     if CURR_STORY:
         forks = CURR_STORY.STORY_FORKS.keys()
         for fork in forks:
-            re.search(fork, transcript, re.I):
-              CURR_STORY.STORY_FORKS[fork]    
+            if re.search(fork, transcript, re.I):
+                print("the fork selected is: {}",format(fork))
+                curr_fork = CURR_STORY.STORY_FORKS[fork]   
+                CURR_STORY.PlayCurrentFork(curr_fork) 
 
   #IF THE KID RESPONDS "strong warrior", gTTs matches, and the StrongWarrior file plays
-    elif re.search("strong warrior", transcript, re.I):
+    elif re.search("strong", transcript, re.I):
         CURR_STORY = StrongWarrior
         curr_fork = CURR_STORY.STORY_FORKS['intro'] #this might need to change to be changing based on where it is (eg. i) 
         CURR_STORY.PlayCurrentFork(curr_fork)
-        
+
     #TODO elif statements for the other story options 
 
 
-#def playTextToAudio(text):
+def playAudio(text):
+    text2Speech = gTTS(text, lang ='en')
+    text2Speech.save('audioFile.mp3')
+    
+    pygame.mixer.init()
+    pygame.mixer.music.load('audioFile.mp3')
+    pygame.mixer.music.play()
+
+
+def playTextToAudio(text):
     #TODO: read in the text and play it as an audio file
-    # google text to speech: check viviks example
-    #pass
+    #google text to speech: check viviks example
+    # pass
+    t2s = gTTS(text, lang ='en')
+    t2s.save('Start.mp3')
+
 
 def Main():
     #initialize things 
@@ -209,6 +226,8 @@ def Main():
         interim_results=True)
     
     #this section is where the action for the gTTs happens:
+    #give the intro 
+    playAudio('What kind of story do you want to hear tonight?')
     
     #mic set up to look for input and the info is sent to google for analysis 
     with MicrophoneStream(RATE, CHUNK) as stream:
@@ -217,22 +236,19 @@ def Main():
                     for content in audio_generator)
 
         responses = client.streaming_recognize(streaming_config, requests)
-    
-    
+        listen_print_loop(responses)
+
+
     #give the intro 
-    SagaIntro()
+    # SagaIntro()
     #wait for the user's input 
-    story_decision()
-    
-    
-    
-    
+    # story_decision()
     
     
     
     
     if __name__ == '__main__':
-        main()
+        Main()
     
     
     
