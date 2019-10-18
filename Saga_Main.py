@@ -177,10 +177,15 @@ def ListenPrintLoop(responses):
             # Exit recognition if any of the transcribed phrases could be one of the key words so it should be fine #
             num_chars_printed = 0
 
+<<<<<<< HEAD
 ###### THIS IS THE ELIF THAT MAKES THE STORIES!! #########
 ########################################################## 
            
 def StoryDecision(transcript):
+=======
+            
+def story_decision(transcript):
+>>>>>>> 7b63f50516b5446ad63994510c22fabb06ee09bb
     global CURR_STORY
     print("is audio playing? : {}".format(pygame.mixer.music.get_busy()))
     

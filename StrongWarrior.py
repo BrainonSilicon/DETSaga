@@ -21,7 +21,12 @@ from adafruit_crickit import crickit
 
 STORY_VARIABLES = {}
 
+<<<<<<< HEAD
 def PlayCurrentFork(CurrFork, variables={}):
+=======
+def PlayCurrentFork(currFork, variables={}):
+    global STORY_VARIABLES
+>>>>>>> 7b63f50516b5446ad63994510c22fabb06ee09bb
     print("Playing current fork")
     STORY_VARIABLES = variables
     currFork()
@@ -66,6 +71,7 @@ def StayInside():
 
     
 
+<<<<<<< HEAD
 #### TODO update the dictionary with the options 
     
 #this is the dictionary 
@@ -77,4 +83,13 @@ STORY_FORKS = {
     'Friend': Friend,
     'Home': StayInside,
     
+=======
+#this is the dictionary
+STORY_FORKS = {
+    'intro' : intro,
+    #these words will be what trigger the next piece of the story
+    'stone': stone,
+    #'word_aa': AA,
+    #'word_ab': AB
+>>>>>>> 7b63f50516b5446ad63994510c22fabb06ee09bb
 }
