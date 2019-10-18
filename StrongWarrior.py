@@ -21,49 +21,60 @@ from adafruit_crickit import crickit
 
 STORY_VARIABLES = {}
 
-def PlayCurrentFork(currFork, variables={}):
+def PlayCurrentFork(CurrFork, variables={}):
     print("Playing current fork")
     STORY_VARIABLES = variables
     currFork()
 
-    
-def stone():
-    text = "The warrior lived in a stone house. bla bla bla. City or Ocean?"
-    playAudio(text)
-    
-    # this is not the actual code playTextToAudio("Do you want a clay house or a stone house?")
-    
-        
-def intro():
-    
-    #setting up the GTTS responses as .mp3 files!
-    text = "Hello brave warrior, let's go on an adventure. Clay or Stone?"
-    playAudio(text)
-    
-    # t2s = gTTS("Hello brave warrior, let's go on an adventure.", lang ='en')
-    # t2s.save('helloWarrior.mp3')
-    #t2s = gTTS('You didnt tell me what to do with that.', lang='en')
-    #t2s.save('idontknow.mp3')
-    
-    # language_code = 'en-US'  # a BCP-47 language tag
+###### TODO change these to the recorded story audio files 
+def Intro():
+    pygame.mixer.init()
+    pygame.mixer.music.load("SWTestIntro.mp3")
+    pygame.mixer.music.play()
 
-    # #set up a client
-    # #make sure GCP is aware of the encoding, rate 
-    # config = types.RecognitionConfig(
-    #     encoding=enums.RecognitionConfig.AudioEncoding.LINEAR16,
-    #     sample_rate_hertz=RATE,
-    #     language_code=language_code)
-    # #our example uses streamingrecognition - most likely what you will want to use.
-    # #check out the simpler cases of asychronous recognition too!
-    # streaming_config = types.StreamingRecognitionConfig(
-    #     config=config,
-    #     interim_results=True)
+def Stone():
+    pygame.mixer.init()
+    pygame.mixer.music.load("SWTestForkA.mp3")
+    pygame.mixer.music.play()
 
+def Clay():
+    pygame.mixer.init()
+    pygame.mixer.music.load("SWTestForkB.mp3")
+    pygame.mixer.music.play()
+    
+def Friend(): 
+    pygame.mixer.init()
+    pygame.mixer.music.load("SWTestForkAa.mp3")
+    pygame.mixer.music.play()
+    
+def StayInside(): 
+    pygame.mixer.init()
+    pygame.mixer.music.load("SWTestForkAb.mp3")
+    pygame.mixer.music.play()
+ 
+ 
+##### THESE ARE THE PROMPTS #####   
+# def ForkAPrompt(): 
+#     pygame.mixer.init()
+#     pygame.mixer.music.load("ForkAPrompt.mp3")
+#     pygame.mixer.music.play()
+
+# def ForkAaPrompt(): 
+#     pygame.mixer.init()
+#     pygame.mixer.music.load("ForkAaPrompt.mp3")
+#     pygame.mixer.music.play()  
+
+    
+
+#### TODO update the dictionary with the options 
+    
 #this is the dictionary 
 STORY_FORKS = {
-    'intro' : intro,
+    'Intro' : Intro,
     #these words will be what trigger the next piece of the story 
-    'stone': stone, 
-    #'word_aa': AA,
-    #'word_ab': AB
+    'Stone': Stone, 
+    'Clay': Clay,
+    'Friend': Friend,
+    'Home': StayInside,
+    
 }

@@ -29,8 +29,6 @@ client = speech.SpeechClient()
 pygame.init()
 pygame.mixer.init()
 
-
-
 def CreateStartAudio():
     t2s = gTTS("What kind of story do you want to hear tonight?", lang ='en')
     t2s.save('Start.mp3')

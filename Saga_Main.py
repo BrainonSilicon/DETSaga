@@ -1,4 +1,5 @@
-##SET UP!! 
+######### SET UP!! ###########
+##############################
 
 #IMPORT PACKAGES 
 from __future__ import division
@@ -10,8 +11,8 @@ import os
 from google.cloud import speech
 from google.cloud.speech import enums
 from google.cloud.speech import types
-import pyaudio #for recording audio!
-import pygame  #for playing audio
+import pyaudio 
+import pygame 
 from six.moves import queue
 
 from gtts import gTTS
@@ -19,30 +20,31 @@ import time
 from adafruit_crickit import crickit
 from adafruit_seesaw.neopixel import NeoPixel
 
-#IMPORT SAGA'S FILES
-import saga_lights
-import saga_servo
+#### IMPORT SAGA'S FILES ########
+# TODO: import saga_lights
+import Saga_servo
+
 #TODO import the story files
 import StrongWarrior
 
 # Audio recording parameters, set for our USB mic.
-RATE = 44100 #if you change mics - be sure to change this :)
-CHUNK = int(RATE / 10)  # 100ms
+RATE = 44100 #this works for the Razer mic but not the new DET mic
+CHUNK = int(RATE / 10)  # 100ms ## TODO this also needs to be changed for the DET new mic 
 
 #import credentials 
-credential_path = "/home/pi/DET190-JSON/DETcredential.json" #TODO change this to who'sever pi we're using
+credential_path = "/home/pi/DET190-JSON/DETcredential.json" #TODO change this to whomever's pi we're using
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"]=credential_path
 
 #THIS IS VERY IMPORTANT AS THE API LOOKS FOR IT 
 client = speech.SpeechClient()
 
-#initialize pygame so that I can run audio 
+#initialize pygame so that we can run audio 
 pygame.init()
 pygame.mixer.init()
 
 
-#### STORY  GLOBAL VARIABLES ################################
-#############################################################
+#### STORY  GLOBAL VARIABLES #######################
+####################################################
 CURR_STORY = None
 STORY_VARIABLES = {}
 #isListening = False # TODO this might need to be taken out
@@ -115,8 +117,7 @@ class MicrophoneStream(object):
 
 
 #this loop is where the microphone stream gets sent
-# TODO look at with Varda so that it's only called when an audio file is not playing 
-def listen_print_loop(responses):
+def ListenPrintLoop(responses):
     """Iterates through server responses and prints them.
 
     The responses passed is a generator that will block until a response
@@ -161,19 +162,26 @@ def listen_print_loop(responses):
 
         else:
             print(transcript + overwrite_chars)
-            #if there's a voice activitated quit - quit!
-            if re.search(r'\b(exit|quit)\b', transcript, re.I):
-                print('Exiting..')
+            #if the kid says that they want to go to sleep - then the story stops
+            if re.search(r'\b(exit|quit|sleep|tired)\b', transcript, re.I): #TODO if it breaks, check this
+                print("Story is ending")
+                ######### SagaNPAudio.Goodnight()
+                SagaServo.SagaClosed()
                 break
+            #elif no reponse for 10 seconds -> prompt the question again -> if still no response then close 
+            
+            
             else:
-                story_decision(transcript)
+                StoryDecision(transcript)
 #            print(transcript)
-            # Exit recognition if any of the transcribed phrases could be
-            # one of our keywords.
+            # Exit recognition if any of the transcribed phrases could be one of the key words so it should be fine #
             num_chars_printed = 0
 
-            
-def story_decision(transcript):
+###### THIS IS THE ELIF THAT MAKES THE STORIES!! #########
+########################################################## 
+           
+def StoryDecision(transcript):
+    global CURR_STORY
     print("is audio playing? : {}".format(pygame.mixer.music.get_busy()))
     
     if pygame.mixer.music.get_busy():
@@ -188,33 +196,67 @@ def story_decision(transcript):
                 curr_fork = CURR_STORY.STORY_FORKS[fork]   
                 CURR_STORY.PlayCurrentFork(curr_fork) 
 
-  #IF THE KID RESPONDS "strong warrior", gTTs matches, and the StrongWarrior file plays
+    #If the kid responds "strong warrior", gTTs matches, and the StrongWarrior file plays
     elif re.search("strong", transcript, re.I):
+        SagaLights.Warrior()
+        SagaServo.SagaOpens()
         CURR_STORY = StrongWarrior
-        curr_fork = CURR_STORY.STORY_FORKS['intro'] #this might need to change to be changing based on where it is (eg. i) 
+        curr_fork = CURR_STORY.STORY_FORKS['Intro'] #this might need to change to be changing based on where it is (eg. i) 
         CURR_STORY.PlayCurrentFork(curr_fork)
 
-    #TODO elif statements for the other story options 
+    # #If the kid responds "clever", gTTs matches, and the CleverMagician file plays
+    # elif re.search("clever", transcript, re.I):
+    #     SagaLights.Magician()
+    #     SagaServo.SagaOpens()
+    #     CURR_STORY = CleverMagician
+    #     curr_fork = CURR_STORY.STORY_FORKS['#####'] #this might need to change to be changing based on where it is (eg. i) 
+    #     CURR_STORY.PlayCurrentFork(curr_fork)
 
-
-def playAudio(text):
-    text2Speech = gTTS(text, lang ='en')
-    text2Speech.save('audioFile.mp3')
+    # #If the kid responds TODO : other stories 
+    # elif re.search("oracle", transcript, re.I):
+    #     SagaLights.#######NAME########()
+    #     SagaServo.SagaOpens()
+    #     CURR_STORY = CleverMagician
+    #     curr_fork = CURR_STORY.STORY_FORKS['#####'] #this might need to change to be changing based on where it is (eg. i) 
+    #     CURR_STORY.PlayCurrentFork(curr_fork)       
     
-    pygame.mixer.init()
-    pygame.mixer.music.load('audioFile.mp3')
-    pygame.mixer.music.play()
 
+ def playAudio(text):
+     text2Speech = gTTS(text, lang ='en')
+     text2Speech.save('audioFile.mp3')
+    
+     pygame.mixer.init()
+     pygame.mixer.music.load('audioFile.mp3')
+     pygame.mixer.music.play()
 
+#function for the capacitive touch which - when pressed - will offer the story choice and the gem stone will glow
+def touch_to_start():
+    crickit.touch_1.value
+    print("Press the Capactive Touch button 1: touch_to_start()")
+    if crickit.touch_1.value:
+        SagaLights.SagaReady()
+        time.sleep(1)
+        print(crickit.touch_1.value)
+    else:
+        print("No button push detected.")
+               
+
+## ARE WE NO LONGER USING THIS AS WE'RE USING AUDIO FILES INSTEAD ???? ########
 def playTextToAudio(text):
     #TODO: read in the text and play it as an audio file
     #google text to speech: check viviks example
-    # pass
+    pass
     t2s = gTTS(text, lang ='en')
     t2s.save('Start.mp3')
 
+######## SAGA'S MAIN WHICH SEQUENCES THE FUNCTIONALITY ##########
+#################################################################
 
 def Main():
+    #Saga is closed to start 
+    print("Saga is waiting")  
+    SagaServo.SagaClosed()
+    
     #initialize things 
     language_code = 'en-US'  # a BCP-47 language tag
     config = types.RecognitionConfig(
@@ -225,9 +267,23 @@ def Main():
         config=config,
         interim_results=True)
     
+    # user touches the gem stone which triggers the book opening 
+    touch_to_start() #this also triggers the gem stone to glow white
+    print("Saga's capative touch and lights are working")
+  
     #this section is where the action for the gTTs happens:
-    #give the intro 
+    ## SAGA OFFERS THE STORY CHOICES 
     playAudio('What kind of story do you want to hear tonight?')
+    
+    ##############################################################
+    #if you get a response -> play the story 
+    #if response == True  
+        #play through the story 
+    #if no response -> prompt "do you want to hear a story"
+    
+
+    ## SAGA LISTENS FOR THE INPUT AND THEN STARTS THE CORRESPONDING STORY ##### 
+    ## the stories have a coloured gem stone associated which changes colour before Saga opens
     
     #mic set up to look for input and the info is sent to google for analysis 
     with MicrophoneStream(RATE, CHUNK) as stream:
@@ -236,21 +292,9 @@ def Main():
                     for content in audio_generator)
 
         responses = client.streaming_recognize(streaming_config, requests)
-        listen_print_loop(responses)
+        ListenPrintLoop(responses)
 
+   
 
-    #give the intro 
-    # SagaIntro()
-    #wait for the user's input 
-    # story_decision()
-    
-    
-    
-    
-    if __name__ == '__main__':
-        Main()
-    
-    
-    
-    
-    
+if __name__ == '__main__':
+    Main()

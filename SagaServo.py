@@ -4,10 +4,10 @@
 import time
 from adafruit_crickit import adafruit_crickit
 
-def Saga_closed():
+def SagaClosed():
     print("Saga is closed")
     crickit.servo_1.angle = 0
 
-def Saga_opens():
+def SagaOpens():
     print ("Saga opens")
     crickit.servo_1.angle = 160 #Saga can open to 165
