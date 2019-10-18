@@ -21,38 +21,30 @@ from adafruit_crickit import crickit
 
 STORY_VARIABLES = {}
 
-def PlayCurrentFork(currFork, variables={}):
+def PlayCurrentFork(currForkKey, variables={}):
     global STORY_VARIABLES
-    print("Playing current fork")
+    print("Playing current fork {}".format("currForkKey"))
+
     STORY_VARIABLES = variables
+    curr_fork = STORY_FORKS[currForkKey]
     currFork()
 
 ###### TODO change these to the recorded story audio files 
 def Intro():
-    pygame.mixer.init()
-    pygame.mixer.music.load("SWTestIntro.mp3")
-    pygame.mixer.music.play()
+    playAudio("SWTestIntro.mp3")
 
 def Stone():
-    pygame.mixer.init()
-    pygame.mixer.music.load("SWTestForkA.mp3")
-    pygame.mixer.music.play()
+    playAudio("SWTestForkA.mp3")
 
 def Clay():
-    pygame.mixer.init()
-    pygame.mixer.music.load("SWTestForkB.mp3")
-    pygame.mixer.music.play()
+    playAudio("SWTestForkB.mp3")
     
 def Friend(): 
-    pygame.mixer.init()
-    pygame.mixer.music.load("SWTestForkAa.mp3")
-    pygame.mixer.music.play()
+    playAudio("SWTestForkAa.mp3")
     
 def StayInside(): 
-    pygame.mixer.init()
-    pygame.mixer.music.load("SWTestForkAb.mp3")
-    pygame.mixer.music.play()
- 
+    playAudio("SWTestForkAb.mp3")
+
  
 ##### THESE ARE THE PROMPTS #####   
 # def ForkAPrompt(): 

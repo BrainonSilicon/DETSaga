@@ -21,11 +21,12 @@ from adafruit_crickit import crickit
 from adafruit_seesaw.neopixel import NeoPixel
 
 #### IMPORT SAGA'S FILES ########
-# TODO: import saga_lights
-import Saga_servo
+import SagaServo
+import SagaLights
 
 #TODO import the story files
 import StrongWarrior
+import OracleOfLife
 
 # Audio recording parameters, set for our USB mic.
 RATE = 44100 #this works for the Razer mic but not the new DET mic
@@ -116,6 +117,36 @@ class MicrophoneStream(object):
                 yield b''.join(data)
 
 
+ def playAudio(text):
+     text2Speech = gTTS(text, lang ='en')
+     text2Speech.save('audioFile.mp3')
+    
+     pygame.mixer.init()
+     pygame.mixer.music.load('audioFile.mp3')
+     pygame.mixer.music.play()
+
+#function for the capacitive touch which - when pressed - will offer the story choice and the gem stone will glow
+#### TODO change this for force touch
+def touch_to_start():
+    crickit.touch_1.value
+    print("Press the Capactive Touch button 1: touch_to_start()")
+    if crickit.touch_1.value:
+        SagaLights.SagaReady()
+        time.sleep(1)
+        print(crickit.touch_1.value)
+    else:
+        print("No button push detected.")
+               
+
+## ARE WE NO LONGER USING THIS AS WE'RE USING AUDIO FILES INSTEAD -> ALSO IT'S THE SAME AS ABOVE ???? ########
+# def playTextToAudio(text):
+#     #TODO: read in the text and play it as an audio file
+#     #google text to speech: check viviks example
+#     pass
+#     t2s = gTTS(text, lang ='en')
+#     t2s.save('Start.mp3')
+
+
 #this loop is where the microphone stream gets sent
 def ListenPrintLoop(responses):
     """Iterates through server responses and prints them.
@@ -163,13 +194,13 @@ def ListenPrintLoop(responses):
         else:
             print(transcript + overwrite_chars)
             #if the kid says that they want to go to sleep - then the story stops
-            if re.search(r'\b(exit|quit|sleep|tired)\b', transcript, re.I): #TODO if it breaks, check this
+            if re.search(r'\b(exit|quit|sleep|sleepy|tired)\b', transcript, re.I): #TODO if it breaks, check this
                 print("Story is ending")
-                ######### SagaNPAudio.Goodnight()
-                SagaServo.SagaClosed()
-                break
-            #elif no reponse for 10 seconds -> prompt the question again -> if still no response then close 
-            
+                ######### TODO put in the goodnight/ending message from Saga 
+                ####### TODO figure out if this should be in our voice or Saga's voice 
+                playAudio("Saga_Audio_Files/SagasGoodnightMessage.mp3") #TODO check the pathname on the pi 
+                SagaServo.SagaClosed() 
+                break  
             
             else:
                 StoryDecision(transcript)
@@ -177,15 +208,10 @@ def ListenPrintLoop(responses):
             # Exit recognition if any of the transcribed phrases could be one of the key words so it should be fine #
             num_chars_printed = 0
 
-<<<<<<< HEAD
 ###### THIS IS THE ELIF THAT MAKES THE STORIES!! #########
 ########################################################## 
            
 def StoryDecision(transcript):
-=======
-            
-def story_decision(transcript):
->>>>>>> 7b63f50516b5446ad63994510c22fabb06ee09bb
     global CURR_STORY
     print("is audio playing? : {}".format(pygame.mixer.music.get_busy()))
     
@@ -198,16 +224,14 @@ def story_decision(transcript):
         for fork in forks:
             if re.search(fork, transcript, re.I):
                 print("the fork selected is: {}",format(fork))
-                curr_fork = CURR_STORY.STORY_FORKS[fork]   
-                CURR_STORY.PlayCurrentFork(curr_fork) 
+                CURR_STORY.PlayCurrentFork(fork) 
 
     #If the kid responds "strong warrior", gTTs matches, and the StrongWarrior file plays
     elif re.search("strong", transcript, re.I):
         SagaLights.Warrior()
         SagaServo.SagaOpens()
         CURR_STORY = StrongWarrior
-        curr_fork = CURR_STORY.STORY_FORKS['Intro'] #this might need to change to be changing based on where it is (eg. i) 
-        CURR_STORY.PlayCurrentFork(curr_fork)
+        CURR_STORY.PlayCurrentFork('Intro')
 
     # #If the kid responds "clever", gTTs matches, and the CleverMagician file plays
     # elif re.search("clever", transcript, re.I):
@@ -224,35 +248,6 @@ def story_decision(transcript):
     #     CURR_STORY = CleverMagician
     #     curr_fork = CURR_STORY.STORY_FORKS['#####'] #this might need to change to be changing based on where it is (eg. i) 
     #     CURR_STORY.PlayCurrentFork(curr_fork)       
-    
-
- def playAudio(text):
-     text2Speech = gTTS(text, lang ='en')
-     text2Speech.save('audioFile.mp3')
-    
-     pygame.mixer.init()
-     pygame.mixer.music.load('audioFile.mp3')
-     pygame.mixer.music.play()
-
-#function for the capacitive touch which - when pressed - will offer the story choice and the gem stone will glow
-def touch_to_start():
-    crickit.touch_1.value
-    print("Press the Capactive Touch button 1: touch_to_start()")
-    if crickit.touch_1.value:
-        SagaLights.SagaReady()
-        time.sleep(1)
-        print(crickit.touch_1.value)
-    else:
-        print("No button push detected.")
-               
-
-## ARE WE NO LONGER USING THIS AS WE'RE USING AUDIO FILES INSTEAD ???? ########
-def playTextToAudio(text):
-    #TODO: read in the text and play it as an audio file
-    #google text to speech: check viviks example
-    pass
-    t2s = gTTS(text, lang ='en')
-    t2s.save('Start.mp3')
 
 ######## SAGA'S MAIN WHICH SEQUENCES THE FUNCTIONALITY ##########
 #################################################################
@@ -274,7 +269,7 @@ def Main():
     
     # user touches the gem stone which triggers the book opening 
     touch_to_start() #this also triggers the gem stone to glow white
-    print("Saga's capative touch and lights are working")
+    print("Saga's touch and lights are working")
   
     #this section is where the action for the gTTs happens:
     ## SAGA OFFERS THE STORY CHOICES 
