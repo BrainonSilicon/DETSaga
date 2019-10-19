@@ -2,7 +2,7 @@
 
 #import packages 
 import time
-from adafruit_crickit import adafruit_crickit
+from adafruit_crickit import crickit
 
 def SagaClosed():
     print("Saga is closed")

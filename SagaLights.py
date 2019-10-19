@@ -22,7 +22,7 @@ from adafruit_seesaw.neopixel import NeoPixel
 
 # TODO : import the LED packages and set up the LEDS 
  
-num_pixels = 1  # we're only using one neopixel for the gemstone
+num_pixels = 8  # we're only using one neopixel for the gemstone
  
 # The following line sets up a NeoPixel strip on Seesaw pin 20 for Feather
 pixels = NeoPixel(crickit.seesaw, 20, num_pixels)
@@ -43,5 +43,8 @@ def SagaReady():
 
 def Warrior():
     pixels.fill(GREEN)
+    
+def SagaOff():
+    pixels.fill(OFF)
     
 # TODO add the other stories' colours and the LED code for the pages 

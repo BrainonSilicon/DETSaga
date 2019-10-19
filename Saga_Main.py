@@ -28,6 +28,8 @@ import SagaLights
 import StrongWarrior
 import OracleOfLife
 
+from utils import playAudio 
+
 # Audio recording parameters, set for our USB mic.
 RATE = 44100 #this works for the Razer mic but not the new DET mic
 CHUNK = int(RATE / 10)  # 100ms ## TODO this also needs to be changed for the DET new mic 
@@ -116,15 +118,6 @@ class MicrophoneStream(object):
 
                 yield b''.join(data)
 
-
- def playAudio(text):
-     text2Speech = gTTS(text, lang ='en')
-     text2Speech.save('audioFile.mp3')
-    
-     pygame.mixer.init()
-     pygame.mixer.music.load('audioFile.mp3')
-     pygame.mixer.music.play()
-
 #function for the capacitive touch which - when pressed - will offer the story choice and the gem stone will glow
 #### TODO change this for force touch
 def touch_to_start():
@@ -199,7 +192,8 @@ def ListenPrintLoop(responses):
                 ######### TODO put in the goodnight/ending message from Saga 
                 ####### TODO figure out if this should be in our voice or Saga's voice 
                 playAudio("Saga_Audio_Files/SagasGoodnightMessage.mp3") #TODO check the pathname on the pi 
-                SagaServo.SagaClosed() 
+                SagaServo.SagaClosed()
+                SagaLights.SagaOff()
                 break  
             
             else:
@@ -272,8 +266,10 @@ def Main():
     print("Saga's touch and lights are working")
   
     #this section is where the action for the gTTs happens:
-    ## SAGA OFFERS THE STORY CHOICES 
-    playAudio('What kind of story do you want to hear tonight?')
+    ## SAGA OFFERS THE STORY CHOICES
+    text2Speech = gTTS('What kind of story do you want to hear tonight?', lang ='en')
+    text2Speech.save('audioFile.mp3')
+    playAudio('audioFile.mp3')
     
     ##############################################################
     #if you get a response -> play the story 

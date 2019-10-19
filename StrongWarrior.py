@@ -1,4 +1,4 @@
-from utilsgit import playAudio
+from utils import playAudio
 #some of these imports my be un-needed
 #from __future__ import division
 
@@ -27,23 +27,23 @@ def PlayCurrentFork(currForkKey, variables={}):
 
     STORY_VARIABLES = variables
     curr_fork = STORY_FORKS[currForkKey]
-    currFork()
+    curr_fork()
 
 ###### TODO change these to the recorded story audio files 
 def Intro():
-    playAudio("SWTestIntro.mp3")
+    playAudio("Saga_Audio_Files/SWTestIntro.mp3")
 
 def Stone():
-    playAudio("SWTestForkA.mp3")
+    playAudio("Saga_Audio_Files/SWTestForkA.mp3")
 
 def Clay():
-    playAudio("SWTestForkB.mp3")
+    playAudio("Saga_Audio_Files/TestNoForkWritten.mp3")
     
 def Friend(): 
-    playAudio("SWTestForkAa.mp3")
+    playAudio("Saga_Audio_Files/SWTestForkAa.mp3")
     
 def StayInside(): 
-    playAudio("SWTestForkAb.mp3")
+    playAudio("Saga_Audio_Files/SWTestForkAb.mp3")
 
  
 ##### THESE ARE THE PROMPTS #####   
