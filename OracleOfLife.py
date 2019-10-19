@@ -18,9 +18,6 @@ import os
 import time
 from adafruit_crickit import crickit
 
-
-STORY_VARIABLES = {}
-
 def PlayCurrentFork(CurrFork, variables={}):
     print("Playing current fork")
     STORY_VARIABLES = variables
@@ -30,3 +27,5 @@ def Intro():
     pygame.mixer.init()
     pygame.mixer.music.load("OracleOfLife.mp3")
     pygame.mixer.music.play()
+    
+STORY_VARIABLES = {'Intro' : Intro}

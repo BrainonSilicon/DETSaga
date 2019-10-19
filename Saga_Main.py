@@ -192,9 +192,13 @@ def ListenPrintLoop(responses):
                 ######### TODO put in the goodnight/ending message from Saga 
                 ####### TODO figure out if this should be in our voice or Saga's voice 
                 playAudio("Saga_Audio_Files/SagasGoodnightMessage.mp3") #TODO check the pathname on the pi 
+                playAudio("Saga_Audio_Files/SagaEndAudio.mp3")
                 SagaServo.SagaClosed()
                 SagaLights.SagaOff()
-                break  
+                break
+            elif re.search(r'(different|menu)', transcript, re.I):
+                print("Exiting current story")
+                PickAStory()
             
             else:
                 StoryDecision(transcript)
@@ -241,7 +245,13 @@ def StoryDecision(transcript):
     #     SagaServo.SagaOpens()
     #     CURR_STORY = CleverMagician
     #     curr_fork = CURR_STORY.STORY_FORKS['#####'] #this might need to change to be changing based on where it is (eg. i) 
-    #     CURR_STORY.PlayCurrentFork(curr_fork)       
+    #     CURR_STORY.PlayCurrentFork(curr_fork)
+def PickAStory():
+    SagaLights.SagaReady()
+    playAudio("Saga_Audio_Files/SagaStartAudio.mp3")
+    text2Speech = gTTS('What kind of story do you want to hear tonight?', lang ='en')
+    text2Speech.save('audioFile.mp3')
+    playAudio('audioFile.mp3')
 
 ######## SAGA'S MAIN WHICH SEQUENCES THE FUNCTIONALITY ##########
 #################################################################
@@ -267,9 +277,7 @@ def Main():
   
     #this section is where the action for the gTTs happens:
     ## SAGA OFFERS THE STORY CHOICES
-    text2Speech = gTTS('What kind of story do you want to hear tonight?', lang ='en')
-    text2Speech.save('audioFile.mp3')
-    playAudio('audioFile.mp3')
+    PickAStory();
     
     ##############################################################
     #if you get a response -> play the story 
