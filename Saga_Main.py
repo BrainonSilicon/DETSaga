@@ -197,7 +197,7 @@ def ListenPrintLoop(responses):
                 SagaLights.SagaOff()
                 break
             elif re.search(r'(different|menu)', transcript, re.I):
-                print("Exiting current story")
+                print("Saga Menu")
                 PickAStory()
             
             else:
@@ -231,21 +231,21 @@ def StoryDecision(transcript):
         CURR_STORY = StrongWarrior
         CURR_STORY.PlayCurrentFork('Intro')
 
-    # #If the kid responds "clever", gTTs matches, and the CleverMagician file plays
-    # elif re.search("clever", transcript, re.I):
-    #     SagaLights.Magician()
-    #     SagaServo.SagaOpens()
-    #     CURR_STORY = CleverMagician
-    #     curr_fork = CURR_STORY.STORY_FORKS['#####'] #this might need to change to be changing based on where it is (eg. i) 
-    #     CURR_STORY.PlayCurrentFork(curr_fork)
+     #If the kid responds "clever", gTTs matches, and the CleverMagician file plays
+     elif re.search("clever", transcript, re.I):
+         SagaLights.Magician()
+         SagaServo.SagaOpens()
+         CURR_STORY = DemoStory
+         CURR_STORY.PlayCurrentFork('Intro')
 
-    # #If the kid responds TODO : other stories 
-    # elif re.search("oracle", transcript, re.I):
-    #     SagaLights.#######NAME########()
-    #     SagaServo.SagaOpens()
-    #     CURR_STORY = CleverMagician
-    #     curr_fork = CURR_STORY.STORY_FORKS['#####'] #this might need to change to be changing based on where it is (eg. i) 
-    #     CURR_STORY.PlayCurrentFork(curr_fork)
+     #If the kid responds TODO : other stories 
+     elif re.search("oracle", transcript, re.I):
+         SagaLights.#######NAME########()
+         SagaServo.SagaOpens()
+         CURR_STORY = CleverMagician
+         curr_fork = CURR_STORY.STORY_FORKS['Intro'] #this might need to change to be changing based on where it is (eg. i) 
+         CURR_STORY.PlayCurrentFork(curr_fork)
+         
 def PickAStory():
     SagaLights.SagaReady()
     playAudio("Saga_Audio_Files/SagaStartAudio.mp3")

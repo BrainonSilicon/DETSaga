@@ -53,6 +53,13 @@ def Warrior():
     time.sleep(0.3)
     pixels.fill(GREEN)
     
+def Magician():
+    pixels.fill(BLUE)
+    time.sleep(0.3)
+    pixels.fill(PURPLE)
+    time.sleep(0.3)
+    pixels.fill(BLUE)
+    
 def SagaOff():
     pixels.fill(OFF)
     

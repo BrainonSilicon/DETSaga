@@ -19,12 +19,15 @@ import time
 from adafruit_crickit import crickit
 
 
-STORY_VARIABLES = {}
-
 def PlayCurrentFork(CurrFork, variables={}):
     print("Playing current fork")
     STORY_VARIABLES = variables
     currFork()
     
+STORY_FORKS = {
+    'Intro' : Intro,
+    'Stone': Stone, 
+    'Clay': Clay
+}
 
 
