@@ -31,19 +31,13 @@ def PlayCurrentFork(currForkKey, variables={}):
 
 ###### TODO change these to the recorded story audio files 
 def Intro():
-    playAudio("Saga_Audio_Files/SWTestIntro.mp3")
+    playAudio("Saga_Audio_Files/StrongWarriorAudio.mp3")
 
 def Stone():
-    playAudio("Saga_Audio_Files/SWTestForkA.mp3")
+    playAudio("Saga_Audio_Files/TestNoForkWritten.mp3")
 
 def Clay():
     playAudio("Saga_Audio_Files/TestNoForkWritten.mp3")
-    
-def Friend(): 
-    playAudio("Saga_Audio_Files/SWTestForkAa.mp3")
-    
-def StayInside(): 
-    playAudio("Saga_Audio_Files/SWTestForkAb.mp3")
 
  
 ##### THESE ARE THE PROMPTS #####   
@@ -65,7 +59,5 @@ STORY_FORKS = {
     'Intro' : Intro,
     #these words will be what trigger the next piece of the story 
     'Stone': Stone, 
-    'Clay': Clay,
-    'Friend': Friend,
-    'Home': StayInside,
+    'Clay': Clay
 }
