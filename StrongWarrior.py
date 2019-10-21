@@ -19,7 +19,7 @@ import time
 from adafruit_crickit import crickit
 
 def PlayCurrentFork(currForkKey, variables={}):
-    print("Playing current fork {}".format("currForkKey"))
+    print("Playing current fork {}".format(currForkKey))
     curr_fork = STORY_FORKS[currForkKey]
     curr_fork()
 

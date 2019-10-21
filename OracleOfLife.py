@@ -19,7 +19,7 @@ import time
 from adafruit_crickit import crickit
 
 def PlayCurrentFork(currForkKey, variables={}):
-    print("Playing current fork {}".format("currForkKey"))
+    print("Playing current fork {}".format(currForkKey))
     curr_fork = STORY_FORKS[currForkKey]
     curr_fork()
     
@@ -27,5 +27,6 @@ def Intro():
     pygame.mixer.init()
     pygame.mixer.music.load("Saga_Audio_Files/OracleOfLife.mp3")
     pygame.mixer.music.play()
+
     
 STORY_FORKS = {'Intro' : Intro}

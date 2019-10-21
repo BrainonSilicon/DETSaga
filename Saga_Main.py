@@ -53,6 +53,7 @@ ss = crickit.seesaw
 GEM_TOUCH = crickit.SIGNAL1
 ss.pin_mode(GEM_TOUCH, ss.INPUT_PULLUP)
 
+
 #### STORY  GLOBAL VARIABLES #######################
 ####################################################
 CURR_STORY = None
@@ -144,7 +145,9 @@ def ListenPrintLoop(responses):
     final one, print a newline to preserve the finalized transcription.
     """
     num_chars_printed = 0
+        
     for response in responses:
+        
         if not response.results:
             continue
 
@@ -178,7 +181,7 @@ def ListenPrintLoop(responses):
                 print("Story is ending")
                 ######### TODO put in the goodnight/ending message from Saga 
                 ####### TODO figure out if this should be in our voice or Saga's voice 
-                playAudio("Saga_Audio_Files/SagasGoodnightMessage.mp3") #TODO check the pathname on the pi 
+                playAudio("Saga_Audio_Files/SagasGoodnightMessage2.mp3") #TODO check the pathname on the pi 
                 playAudio("Saga_Audio_Files/SagaEndAudio.mp3")
                 SagaServo.SagaClosed()
                 SagaLights.SagaOff()
@@ -205,39 +208,44 @@ def StoryDecision(transcript):
         print("exited storyDecision early.")
         return
 
-
-    #THREADING SAGALIGHTS
     print("Current Story : {}".format(CURR_STORY))
     if CURR_STORY:
         forks = CURR_STORY.STORY_FORKS.keys()
         for fork in forks:
             if re.search(fork, transcript, re.I):
                 print("the fork selected is: {}",format(fork))
+                SagaLights.PlayLed(SagaLights.AcceptedReply)
                 CURR_STORY.PlayCurrentFork(fork)
+                SagaLights.PlayLed(SagaLights.WaitingForForKReply)
 
-                #If the kid responds "strong warrior", gTTs matches, and the StrongWarrior file plays
+    #If the kid responds "strong warrior", gTTs matches, and the StrongWarrior file plays
     elif re.search("strong", transcript, re.I):
-        SagaLights.Warrior()
+        print("strong was heard")
+        SagaLights.PlayLed(SagaLights.Warrior)
         SagaServo.SagaOpens()
         CURR_STORY = StrongWarrior
         CURR_STORY.PlayCurrentFork('Intro')
 
         #If the kid responds "clever", gTTs matches, and the CleverMagician file plays
     elif re.search("clever", transcript, re.I):
-        SagaLights.Magician()
+        SagaLights.PlayLed(SagaLights.Magician)
         SagaServo.SagaOpens()
         CURR_STORY = DemoStory
         CURR_STORY.PlayCurrentFork('Intro')
 
         #If the kid responds TODO : other stories
     elif re.search("oracle", transcript, re.I):
-        SagaLights.Oracle()
+        SagaLights.PlayLed(SagaLights.Oracle)
         SagaServo.SagaOpens()
         CURR_STORY = OracleOfLife
         CURR_STORY.PlayCurrentFork('Intro')
          
 def PickAStory():
+    global CURR_STORY
+    CURR_STORY = None
     playAudio('Saga_Audio_Files/NewIntroWakeUp.mp3')
+    SagaLights.PlayLed(SagaLights.WaitingForReply)
+    print("Done Playing Intro Audio")
 
 #function for the capacitive touch which - when pressed - will offer the story choice and the gem stone will glow
 #### TODO change this for force touch
@@ -272,8 +280,7 @@ def Main():
         touched = touch_to_start()
         
     if touched:
-        SagaLights.SagaReady()
-        time.sleep(1)
+        SagaLights.PlayLed(SagaLights.SagaReady)
         PickAStory()
   
     #this section is where the action for the gTTs happens:
