@@ -25,7 +25,7 @@ def PlayCurrentFork(currForkKey, variables={}):
     
 def Intro():
     pygame.mixer.init()
-    pygame.mixer.music.load("OracleOfLife.mp3")
+    pygame.mixer.music.load("Saga_Audio_Files/OracleOfLife.mp3")
     pygame.mixer.music.play()
     
-STORY_VARIABLES = {'Intro' : Intro}
+STORY_FORKS = {'Intro' : Intro}

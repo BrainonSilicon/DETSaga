@@ -20,10 +20,6 @@ from adafruit_crickit import crickit
 RATE = 44100 #TODO: change this to razer mic
 CHUNK = int(RATE / 10)  # 100ms
 
-#import credentials 
-credential_path = "/home/pi/DET190-JSON/DETcredential.json" #credential file path
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"]=credential_path
-
 client = speech.SpeechClient()
 
 pygame.init()

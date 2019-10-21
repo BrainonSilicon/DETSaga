@@ -29,6 +29,7 @@ import SagaLights
 #TODO import the story files
 import StrongWarrior
 import OracleOfLife
+import DemoStory
 
 from utils import playAudio 
 
@@ -232,11 +233,11 @@ def StoryDecision(transcript):
     elif re.search("oracle", transcript, re.I):
         SagaLights.Oracle()
         SagaServo.SagaOpens()
-        CURR_STORY = CleverMagician
+        CURR_STORY = OracleOfLife
         CURR_STORY.PlayCurrentFork('Intro')
          
 def PickAStory():
-    playAudio('Saga_Audio_Files/IntroWakeUp.mp3')
+    playAudio('Saga_Audio_Files/NewIntroWakeUp.mp3')
 
 #function for the capacitive touch which - when pressed - will offer the story choice and the gem stone will glow
 #### TODO change this for force touch
@@ -253,6 +254,7 @@ def Main():
     #Saga is closed to start 
     print("Saga is waiting")  
     SagaServo.SagaClosed()
+    SagaLights.SagaOff()
     
     #initialize things 
     language_code = 'en-US'  # a BCP-47 language tag
@@ -271,7 +273,6 @@ def Main():
         
     if touched:
         SagaLights.SagaReady()
-        playAudio("Saga_Audio_Files/SagaStartAudio.mp3")
         time.sleep(1)
         PickAStory()
   
