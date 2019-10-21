@@ -43,7 +43,7 @@ STORY_FORKS = {
     'Intro' : Intro,
     'Right': River,
     'River': River,
-    'Figure': NoFrok,
+    'Figure': NoFork,
     'Ghost': NoFork,
     'Left': Valley,
     'Valley': Valley,

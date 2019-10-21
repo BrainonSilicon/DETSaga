@@ -77,8 +77,12 @@ def Warrior():
 def Magician():
     pixels.fill(BLUE)
     time.sleep(0.3)
-    pixels.fill(PURPLE)
-    time.sleep(0.3)
+    for i in range(11):
+        pixels[8] = fade(BLUE, PURPLE, i * 1/10)
+        time.sleep(0.1)
+    for i in range(11):
+        pixels[8] = fade(PURPLE, BLUE, i * 1/10)
+        time.sleep(0.1)
     pixels.fill(BLUE)
     
 def Oracle():
