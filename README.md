@@ -17,6 +17,6 @@ Introducing Saga the ultimate bedtime storyteller. Bedtime stories are important
 Documentation for the project can be found [here](https://www.brainonsilicon.com/saga)
 
 ## License
-Shield: [![CC BY 4.0][cc-by-shield]][cc-by]
+[cc-by-shield]: https://img.shields.io/badge/License-CC%20BY%204.0-lightgrey.svg
 Please give attribution if referencing or using this project or its components by citing Dylan Arceneaux, Sophia Batchelor, Stephanie Claudino Daffara, & Varda Shrivastava (2019). DET Saga. Berkeley, CA. 
 
