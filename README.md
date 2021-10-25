@@ -1,3 +1,6 @@
+![Screenshot 2021-10-25 164341](https://user-images.githubusercontent.com/42813259/138728002-22d63e17-19ca-48f7-9603-31d21c4d4c11.png)
+
+
 # About The Project
 
 Saga is a "Choose Your Own Adventure" storybook that reads itself to you. 
